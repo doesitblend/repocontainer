@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  repoman:
+    environment: 
+      - PYTHONPATH=/usr/local/lib/python3.6/site-packages
+    image: local:repoman
+    build:
+      context: .\
+      dockerfile: Dockerfile
+    command: ["/usr/sbin/init"]
+    privileged: True
+    hostname: repoman
+    privileged: True
+    volumes: 
+      - "./repo:/var/www/html"
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - datavol:/var/www/html
+    networks: 
+      reponet:
+        aliases:
+          - repoman
+volumes:
+  datavol: 
+
+networks:
+  reponet:
